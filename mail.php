@@ -1,7 +1,15 @@
 <?php
+session_start();
+
+if (isset($_POST["submit"])){
+    $email = $_POST["email"];
+
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        die("invalid email");
+    }
 
     $headers = array(
-        'Authorization: Bearer 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',
+        'Authorization: Bearer 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',
         'Content-Type: application/json'
     );
 
@@ -10,8 +18,8 @@
             array(
                 "to" => array(
                     array(
-                        "email" => 'charlesmaina2002@gmail.com',
-                        "name" => 'CM'
+                        "email" => $email,
+                        "name" => 'JK'
                     )
                 )
             )
@@ -20,11 +28,11 @@
             "email" => 'admin@icse.rochella.org',
             "name" => 'ICSE'
         ),
-        "subject" => 'Test me',
+        "subject" => 'WELCOME TO YOUR APPLICATION!',
         "content" => array(
             array(
                 "type" => "text/html",
-                "value" => 'Hi there this is a test'
+                "value" => 'Hi there. welcome!<br> To complete your registration,<a href="afterEmail.php">Click here</a> ! '
             )
         )
     );
@@ -37,5 +45,13 @@
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $response = curl_exec($ch);
     curl_close($ch);
+
+    if ($response) {
+        echo "Welcome email sent successfully to $email";
+        $_SESSION["control"] = "Hi there, $email. Welcome ";
+    } else {
+        echo "Failed to send the welcome email";
+    }
+}
 
 ?>

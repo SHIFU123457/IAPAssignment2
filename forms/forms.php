@@ -1,6 +1,76 @@
 <?php
-
+session_start();
+require_once "./db/dbConnect.php";
 class forms{
+   public function completeRegistration(){
+      ?>
+      <form action="./registerUser.php" method="POST">
+         <div>
+            <?php if($_SESSION["control"]){
+               ?><h3><?php print $_SESSION["control"]; ?></h3><?php
+            } ?>
+            <div class="mb-3 form-group">
+               <label>First Name: </label>
+               <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter first name" autocomplete="off" placeholder/>
+               <br>
+               <label>Last Name: </label>
+               <input type="text" class="form-control" name="lastname" placeholder="Enter last name" autocomplete="off" maxlength="50">
+               <br>
+               <label>Password: </label>
+               <input type="password" class="form-control" name="password" placeholder="Enter desired password" autocomplete="off" maxlength="50"> 
+               <br>
+               <label>Gender: </label>
+               <input type="radio" name="gender" value="male">male
+               <input type="radio" name="gender" value="female">female
+               <br>
+               <label>Location:</label>
+               <input type="text" class="form-control" name="location" placeholder="Enter postal code" autocomplete="off" maxlength="50">
+               <br>
+               <label>Phone number: </label>
+               <input type="text" class="form-control" name="phoneNo" placeholder="Add your phone number" autocomplete="off" maxlength="50">
+               <br>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary">COMPLETE</button>
+         </div>
+      </form>
+      <?php
+    }
+    public function seeUsers($conn){
+      ?><table>
+         <tr>
+            <th>USER NO</th>
+            <th>FIRST NAME</th>
+            <th>LAST NAME</th>
+            <th>GENDER</th>
+            <th>LOCATION</th>
+            <th>PHONE NO<th>
+         </tr>
+               <?php
+               $sqlst = "SELECT firstname, lastname, gender, location, phoneno FROM users ORDER BY firstname ASC;";
+               $sqlst2 = $conn->query($sqlst);
+               if($sqlst2->num_rows > 0){
+                  $num = 1;
+                  while($sqlst3 = $sqlst2->fetch_assoc()){
+                     ?>
+                     <tr>
+                        <td><?php print $num; $num++ ?></td>
+                        <td><?php print $sqlst3["firstname"]; ?></td>
+                        <td><?php print $sqlst3["lastname"]; ?></td>
+                        <td><?php print $sqlst3["gender"]; ?></td>
+                        <td><?php print $sqlst3["location"]; ?></td>
+                        <td><?php print $sqlst3["phoneno"]; ?></td>
+                     </tr>
+                     <?php
+                  }
+               }
+               else{
+                  echo "0 results.";
+               }
+               ?>
+         </td>
+      </table><?php
+    }
+
     public function sign_in_form(){
         ?>
 <div class="row align-items-md-stretch">
@@ -39,13 +109,13 @@ class forms{
 <div class="row align-items-md-stretch">
    <div class="col-md-6">
       <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-         <form action="" method="POST">
+         <form action="mail.php" method="POST">
             <div class="mb-3 form-group">
                <label for="exampleInputEmail1">Email address</label>
-               <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+               <input type="email" name ="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" autocomplete="off">
                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <button type="submit" name="submit" class="btn btn-primary">Sign Up</button>
          </form>
       </div>
    </div>
