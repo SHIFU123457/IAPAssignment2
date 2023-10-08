@@ -1,9 +1,22 @@
 <?php 
 require_once "kichwa.php";
 require_once "PDOcon.php";
-$DBConnection = new DBConnection();
-$pdo = $DBConnection->getPDO();
-?>
+$DBConnection2 = new DBConnection();
+$pdo = $DBConnection2->getPDO();
+
+if(isset($_POST["submit"])){
+    $username = addslashes(ucwords(strtolower($_POST["username"])));
+    $email = $_POST["email"];
+    $passsword = $_POST["password"];
+    $dob = $_POST["dob"];
+    $location = $_POST["location"];
+    $gender = $_POST["gender"];
+
+    $stm = $DBConnection2->addUser($username, $passsword, $dob, $location, $email, $gender);
+
+    header("Location: readFromDB.php");
+}
+    ?>
 <body>
     <div class="div1">
         <h1>INPUT FORM</h1>
@@ -51,24 +64,5 @@ $pdo = $DBConnection->getPDO();
 
     </div>
 
-    <?php
-if(isset($_POST["submit"])){
-    $username = addslashes(ucwords(strtolower($_POST["username"])));
-    $email = $_POST["email"];
-    $passsword = $_POST["password"];
-    $dob = $_POST["dob"];
-    $location = $_POST["location"];
-    $gender = $_POST["gender"];
-
-    $stm = $DBConnection->addUser($username, $passsword, $dob, $location, $email, $gender);
-
-    if ($stm) {
-        echo "USER ENTERED SUCCESSFULLY";
-        header("Location: readFromDB.php");
-    } else {
-        echo "ANOTHER ANOMALY";
-    }
-}
-    ?>
 </body>
 </html>
